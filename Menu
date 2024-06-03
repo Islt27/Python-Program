@@ -1,0 +1,106 @@
+def menu():
+  print ("[1] Date and time")
+  print ("[2] IP address")
+  print ("[3] Remote home directory listing")
+  print ("[4] Backup remote file")
+  print ("[5] Save web page")
+  print ("[Q] Quit")
+menu()
+option = int(input("Welome! What would you like to do? :) : "))
+if option != 0:
+  if option == 1:
+    from datetime import datetime
+    # DD/MM/YY H:M:S
+    now = datetime.now()
+    dt_string = now.strftime ("%d/%m/%Y %H:%M:%S")
+    print("Date and time =",dt_string)
+    pass
+    anykey=input("Press Enter to return to the menu")
+    menu()
+  elif option == 2:
+    ## importing socket module
+    import socket
+    ## getting the hostname by socket.gethostname() method
+    hostname = socket.gethostname()
+    ## getting the IP address using socket.gethostbyname() method
+    ip_address = socket.gethostbyname(hostname)
+    ## printing the hostname and ip_address
+    print(f"Hostname: {hostname}")
+    print(f"IP Address: {ip_address}")
+    pass
+    anykey=input("Press Enter to return to the menu")
+    menu()
+  elif option == 3:
+    def Remotehomedirectorylisting():
+      #netmiko test
+      from netmiko import ConnectHandler
+      net_connect = ConnectHandler(
+      #lubuntu on virtual box
+      device_type="linux",
+      host="127.0.0.1",
+      port="5679",
+      username="inkar",
+      password="inkar",
+      secret="inkar"
+      )
+      net_connect.enable()
+      #creates the home directory list
+      command = "ls"
+      output = net_connect.send_command(command)
+      print(output)
+      anykey=input("\nPress Enter to return to the menu")
+      menu()
+    Remotehomedirectorylisting()
+
+  #this function backs up the remote file
+  elif option == 4:
+    def backupremotefile():
+      #netmiko test
+      from netmiko import ConnectHandler
+      net_connect = ConnectHandler(
+      #lubuntu on virtual box
+      device_type="linux",
+      host="127.0.0.1",
+      port="5679",
+      username="inkar",
+      password="inkar",
+      secret="inkar"
+      )
+      net_connect.enable()
+
+      #enables the user to backup files in the home directory
+      print("All files in directory")
+      commandBefore = "ls"
+      outputBefore = net_connect.send_command(commandBefore)
+      print(outputBefore)
+      print()
+      #backup file
+      commandCopy = "cp /home/inkar/backupfile.txt/home/inkar/backupfile.txt.old"
+      outputCopy = net_connect.send_command(commandCopy)
+      print(outputCopy)
+      print()
+      print("All files in directory")
+      print()
+      commandAfter = "ls"
+      outputAfter = net_connect.send_command(commandAfter)
+      print(outputAfter)
+
+      anykey=input("Press Enter to return to the menu")
+      menu()
+    backupremotefile()
+
+  elif option == 5:
+    import requests
+    def savewebpage():
+      #requests a website link
+      website = input("Please enter a URL:")
+      #retrieves the web page
+      r = requests.get(website)
+      #saves as named file
+      with open("savedWebPage","wb") as f:
+        f.write(r.content)
+      anykey=input("Press Enter to return to the menu")
+      menu()
+    savewebpage()
+#if number 0 is pressed, the programme exits
+print("Thanks for using the menu. Goodbye!")
